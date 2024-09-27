@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>vector clicker</title>
+</head>
+<style type="text/css">
+
+
+	@import url('https://fonts.googleapis.com/css2?family=Jersey+10&display=swap');
+	@import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Moderustic:wght@300..800&display=swap');
+
+
+
+	body, html{
+		border: 0;
+		padding: 0;
+		margin: 0;
+		overflow: hidden;
+		width: 100%;
+		height: 100%;
+		font-family: "Moderustic", sans-serif;
+		color: white;
+
+		background-image: url(base.png);
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+
+	.tab{
+		z-index:;
+		width: 240px;
+		height: 100vh;
+		background-color: #000000ad;
+		position: absolute;
+		left: 0;
+		top: 0;
+		box-shadow: 0px 0px 30px 40px #000000ad;
+	}
+
+	.btn{
+		text-decoration: none;
+		align-items: center;
+/*		padding: 7px 20px;*/
+/*		border: 1px solid #d1b1b1;*/
+		border-radius: 4px;
+		translate: 20px 0px;
+		cursor: pointer;
+		transition: 0.3s;
+	}
+	.btn:hover{
+		opacity: 0.5;
+	}
+</style>
+<body>
+	<h1  style="background-color: #000000ad; padding: 6px 20px;  position: absolute; top: 20px; border-radius: 4px; right: 320px; text-align: center;"><span style="color: #db4545;">HP</span>: <span style="color: #90d778;" id="hp"  >x</span></h1>
+	<div class="tab">
+		<h1 style="margin-top: 50px; margin-left: 50px; font-size: 2em; color: #d1b1b1;"><span style="color: #db4545; margin-right: 2px;" >$</span><span id="balance" style="color: #db4545;">0</span></h1>
+		<p style="margin-left: 70px; font-size: 1.2em; color: #d1b1b1;">Damage: <span style="color: #d1b1b1;" id="damage">0</span><span style="color: #db4545;">hp</span></p>
+		<p style="margin-left: 70px; font-size: 1.2em; color: #d1b1b1;">earn: <span style="color: seagreen;" >$</span><span style="color: #d1b1b1" id="earn">0</span></p>
+		<p style="margin-left: 70px; font-size: 1.2em; color: #d1b1b1;"><span style="color: #7cbde2;">auto</span>-earn: <span style="color: seagreen;" >$</span><span style="color: #d1b1b1" id="auto_earn">0</span></p>
+		<h1 style="color: #d1b1b1; margin-top: 50px; margin-left: 50px; font-size: 2em;">Shop:</h1>
+		<p onclick="damage_costt()"  class="btn"  style="margin-bottom: 20px; margin-left: 50px; font-size: 1.2em; color: #db4545;"href="#">damage $<span id="damage_cost" >0</span></p>
+		<p onclick="earn_costt()" class="btn" style="margin-left: 50px; font-size: 1.2em; color: #90b05b;"href="#">earn $<span id="earn_cost">0</span></p>
+		<p onclick="auto_earn_costt()" href="#"class="btn" style="margin-left: 50px; font-size: 1.2em; color: #7cbde2;"href="#">auto-earn $<span id="auto_earn_cost">0</span></p>
+	</div>
+	<a style="z-index: 100; background-color: #ffffff00; width: calc(100% - 240px); height: 100%; position: absolute; top: 0; right: 0;" onclick="cl()"></a>
+<img onclick="cl()" id="vector" style="position: absolute; right: 200px; bottom: -20px; height: 550px;" src="vector.png">
+</body>
+<script type="text/javascript">
+	let total = 0;
+	let earn = 1;
+	let balance = 0;
+	let earn_cost = 45;
+	let damage = 0;
+	let damage_cost = 30;
+	let hp = 10000;
+	let auto_earn_cost = 15;
+	let auto_earn = 0;
+	let randomNumber = 0;
+	let play = 0;
+	let stop_repeat = 0;
+
+	const vector = document.getElementById("vector");
+	document.getElementById("balance").innerHTML = balance;
+	document.getElementById("earn").innerHTML = earn;
+	document.getElementById("earn_cost").innerHTML = earn_cost;
+	document.getElementById("damage").innerHTML = damage;
+	document.getElementById("damage_cost").innerHTML = damage_cost;
+	document.getElementById("hp").innerHTML = hp;
+	document.getElementById("auto_earn_cost").innerHTML = auto_earn_cost;
+	document.getElementById("auto_earn").innerHTML = auto_earn;
+
+	function updateStats() {
+    balance += auto_earn;
+    document.getElementById("balance").innerHTML = balance;
+	}
+	function playMusic() {
+        const audio = new Audio('music.mp3'); // Подключение аудиофайла
+        audio.play(); // Воспроизведение аудио
+
+        // Повторное воспроизведение по окончании
+        audio.addEventListener('ended', function() {
+            setTimeout(playMusic, 0); // Воспроизвести снова без задержки
+        });
+    }
+
+    // Ожидание первого взаимодействия пользователя
+    document.addEventListener('click', function() {
+        playMusic(); // Запуск музыки при первом клике
+    }, { once: true }); // Событие сработает только один раз
+
+    // Запуск музыки при загрузке страницы
+
+
+// Start the interval when the page loads
+	window.onload = function() {
+		
+    	setInterval(updateStats, 800);
+	};
+	
+	function cl(){
+		vector.style.height = "540px";
+		total++;
+		balance += earn;
+		hp -= damage;
+		document.getElementById("balance").innerHTML = balance;
+		document.getElementById("hp").innerHTML = hp;
+
+		setTimeout(function (){
+			vector.style.height = "550px";
+		}, 40);
+
+	}
+
+	function earn_costt(){
+		if (balance >= earn_cost){
+			balance -= earn_cost;
+			earn++;
+			earn_cost += 44;
+			document.getElementById("earn_cost").innerHTML = earn_cost;
+			document.getElementById("earn").innerHTML = earn;
+			document.getElementById("balance").innerHTML = balance;
+
+		} else{
+			alert("NO MONEY");
+		}
+	}
+
+	function damage_costt(){
+		if (balance >= damage_cost){
+			balance -= damage_cost;
+			damage++;
+			damage_cost += 29;
+			document.getElementById("damage").innerHTML = damage;
+			document.getElementById("damage_cost").innerHTML = damage_cost;
+			document.getElementById("balance").innerHTML = balance;
+
+		} else{
+			alert("No MONEY");
+		}
+	}
+
+	function auto_earn_costt(){
+		if (balance >= auto_earn_cost) {
+			balance -= auto_earn_cost;
+			auto_earn++;
+			auto_earn_cost += 17;
+
+			document.getElementById("auto_earn_cost").innerHTML = auto_earn_cost;
+			document.getElementById("auto_earn").innerHTML = auto_earn;
+			document.getElementById("balance").innerHTML = balance;
+
+		}
+	}
+
+
+	// function checksound(){
+	// 	if (total % 43 === 0){
+	// 		randomNumber = Math.floor(Math.random() * 4) + 1;
+
+	// 		if (randomNumber == 1){
+	// 			const audio1 = new Audio('ohyeah.mp3'); // Подключение аудиофайла
+    //     		audio1.play(); // Воспроизведение аудио
+	// 		} else if (randomNumber == 2) {
+	// 			const audio2 = new Audio('vector.mp3'); // Подключение аудиофайла
+    //     		audio2.play(); // Воспроизведение аудио
+	// 		} else if (randomNumber == 3) {
+	// 			const audio3 = new Audio('squid.mp3'); // Подключение аудиофайла
+    //     		audio3.play(); // Воспроизведение аудио
+	// 		} else if (randomNumber == 4) {
+	// 			const audio4 = new Audio('piranha.mp3'); // Подключение аудиофайла
+    //     		audio4.play(); // Воспроизведение аудио
+	// 		} else{
+	// 			alert("audio error")
+	// 		}
+	// 	}
+	// }
+
+
+
+	function checksound() {
+		if (play == 1){
+			randomNumber = Math.floor(Math.random() * 4) + 1;
+
+			if (randomNumber == 1){
+				const audio1 = new Audio('ohyeah.mp3'); // Подключение аудиофайла
+        		audio1.play(); // Воспроизведение аудио
+			} else if (randomNumber == 2) {
+				const audio2 = new Audio('vector.mp3'); // Подключение аудиофайла
+        		audio2.play(); // Воспроизведение аудио
+			} else if (randomNumber == 3) {
+				const audio3 = new Audio('squid.mp3'); // Подключение аудиофайла
+        		audio3.play(); // Воспроизведение аудио
+			} else if (randomNumber == 4) {
+				const audio4 = new Audio('piranha.mp3'); // Подключение аудиофайла
+        		audio4.play(); // Воспроизведение аудио
+			} else{
+				alert("audio error")
+			}
+
+			
+        
+		}
+
+		play = 1;
+		setTimeout(checksound, 23405); // Воспроизвести снова без задержки
+        
+    }
+
+    // Ожидание первого взаимодействия пользователя
+    document.addEventListener('click', function() {
+    	if (stop_repeat == 0) {
+    		checksound()
+    	}
+        
+        stop_repeat = 1;
+    }, { once: true }); // Событие сработает только один раз
+</script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
